@@ -57,7 +57,7 @@ return [
             ],
             'client_options' => [
                 // برای رفع خطای SSL موقت:
-                'verify' => false,
+                'verify' => 'E:\cacert.pem\cacert.pem',
             ],
         ],
 
