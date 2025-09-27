@@ -48,6 +48,7 @@ import echo from 'src/boot/echo'
 import { nextTick, onMounted, ref } from 'vue'
 
 const messages = ref([])
+const me = ref('')
 const text = ref('')
 const chatScroll = ref(null)
 
@@ -63,7 +64,8 @@ onMounted(() => {
   api
     .get('api/getMessages')
     .then((r) => {
-      messages.value = r.data
+      messages.value = r.data.messages
+      me.value = r.data.me
       scrollToBottom()
     })
     .catch((e) => {

@@ -5,13 +5,15 @@ namespace App\Http\Controllers;
 use App\Events\MessageSent;
 use App\Models\Message;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class MessageController extends Controller
 {
     public function index()
     {
+        $me = Auth::user();
         $messages = Message::with('user')->get();
-        return response()->json($messages, 200);
+        return response()->json(['messages' => $messages, 'me' => $me], 200);
     }
 
     public function store(Request $request)
