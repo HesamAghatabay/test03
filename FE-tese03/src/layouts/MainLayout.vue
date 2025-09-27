@@ -5,6 +5,10 @@
         <q-btn flat dense round icon="menu" aria-label="Menu" @click="toggleLeftDrawer" />
 
         <q-toolbar-title> Quasar App </q-toolbar-title>
+        <div class="q-mx-md">
+          <q-btn to="register">register</q-btn>
+          <q-btn to="login">login</q-btn>
+        </div>
 
         <div>Quasar v{{ $q.version }}</div>
       </q-toolbar>
