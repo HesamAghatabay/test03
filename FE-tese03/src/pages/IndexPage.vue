@@ -1,22 +1,46 @@
+```vue
 <template>
-  <q-page class="q-pa-md q-page">
-    <div class="q-pa-md row justify-center">
-      <div style="width: 100%; max-width: 400px; padding-bottom: 130px">
+  <q-page class="q-pa-md flex flex-center bg-grey-2">
+    <q-card flat bordered class="full-width" style="max-width: 500px; height: 80vh">
+      <!-- نوار بالای چت -->
+      <q-toolbar class="bg-primary text-white">
+        <q-toolbar-title>گفتگو</q-toolbar-title>
+        <q-btn flat round dense icon="more_vert" color="white" />
+      </q-toolbar>
+
+      <!-- محتوای پیام‌ها -->
+      <q-scroll-area ref="chatScroll" class="q-pa-md col" style="height: calc(100% - 110px)">
         <q-chat-message
           v-for="(message, index) in messages"
           :key="'message' + index"
           :name="message.user_name ?? message.user.name"
-          :text="[message.content]"
           sent
+          :text="[message.content]"
+          class="q-ma-sm"
         />
+      </q-scroll-area>
+
+      <!-- بخش ورودی پیام -->
+      <div class="row items-center q-pa-sm bg-grey-1" style="position: sticky; bottom: 0">
+        <q-input
+          rounded
+          outlined
+          dense
+          v-model="text"
+          placeholder="پیام خود را بنویسید..."
+          class="col-grow q-mr-sm"
+          @keyup.enter="send"
+        >
+          <template v-slot:append>
+            <q-icon name="emoji_emotions" class="cursor-pointer" />
+          </template>
+        </q-input>
+        <q-btn round color="primary" icon="send" @click="send" />
       </div>
-    </div>
-    <div style="width: 600px; position: absolute; bottom: 20px">
-      <q-input outlined v-model="text" label="Outlined" />
-      <q-btn @click="send">send</q-btn>
-    </div>
+    </q-card>
   </q-page>
 </template>
+```
 
 <script setup>
 import { api } from 'src/boot/axios'
@@ -25,12 +49,22 @@ import { nextTick, onMounted, ref } from 'vue'
 
 const messages = ref([])
 const text = ref('')
+const chatScroll = ref(null)
+
+function scrollToBottom() {
+  nextTick(() => {
+    if (chatScroll.value) {
+      chatScroll.value.setScrollPercentage('vertical', 1)
+    }
+  })
+}
 
 onMounted(() => {
   api
     .get('api/getMessages')
     .then((r) => {
       messages.value = r.data
+      scrollToBottom()
     })
     .catch((e) => {
       console.error(e)
@@ -38,10 +72,7 @@ onMounted(() => {
   echo.channel('chat').listen('MessageSent', (e) => {
     console.log('New message:', e)
     messages.value.push(e)
-    nextTick(() => {
-      const container = document.querySelector('.q-page')
-      container.scrollTop = container.scrollHeight
-    })
+    scrollToBottom()
   })
 })
 

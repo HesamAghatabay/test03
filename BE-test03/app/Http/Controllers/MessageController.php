@@ -17,7 +17,7 @@ class MessageController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'content' => 'min:"1"'
+            'text' => 'required'
         ]);
         $message = Message::create([
             'content' => $request->text,
