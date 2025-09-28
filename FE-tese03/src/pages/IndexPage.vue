@@ -4,7 +4,7 @@
     <q-card flat bordered class="full-width" style="max-width: 500px; height: 80vh">
       <!-- نوار بالای چت -->
       <q-toolbar class="bg-primary text-white">
-        <q-toolbar-title>صفحه چت</q-toolbar-title>
+        <q-toolbar-title>صفحه چت برای تست</q-toolbar-title>
         <q-btn flat round dense icon="more_vert" color="white" />
       </q-toolbar>
 
